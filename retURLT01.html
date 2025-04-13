@@ -1,0 +1,39 @@
+<html>
+
+<body>
+    <h1>3DS Return URL Try</h1>
+    <p id="demo"></p>
+	<div id="status">Awaiting Response</div>	
+	<div id="challengeResult">Awaiting Result</div>
+
+    <script>		
+		//document.getElementById("status").innerText = 'Hello';        
+        console.info('Hello Console');
+
+        window.addEventListener("message", function (event) {
+            //This is a Cardinal Commerce URL in live.
+            //if (event.origin === "https://centinelapistag.cardinalcommerce.com") {
+            //if (event.origin === "https://secure-test.worldpay.com") {
+            if (true) {
+                var data = JSON.parse(event.data);
+                console.warn('Merchant received a message:', data);
+                if (data !== undefined && data.Status) {
+                    // Extract the value of SessionId for onward processing.
+                    console.info('Success');
+					document.getElementById("status").innerText = 'Success';
+					//document.getElementById("ddcResult").innerText = "Here the message";
+					document.getElementById("challengeResult").innerText = JSON.stringify(data);
+					event.source.postMessage('this is response.',event.origin);
+                    console.info(data);
+                    
+                }
+            }
+        }, false);
+        console.info('END');
+        //console.info(data);
+		//document.getElementById("ddcResult").innerText = data.JSON;
+
+    </script>
+</body>
+
+</html>
