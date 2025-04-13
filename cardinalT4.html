@@ -1,0 +1,55 @@
+<html>
+
+<body>
+    <h1>DDC Try</h1>
+
+    <p id="demo"></p>	
+	<div id="status"></div>
+	<div id="ddcResult"></div>
+	
+
+    <iframe id="myiframe" name="myiframe" height="1" width="1" title="sometitle" srcdoc="
+         <form id='collectionForm' method='POST' action='https://secure-test.worldpay.com/shopper/3ds/ddc.html'>
+            <input type='hidden' name='Bin' value='462084' />
+            <input type='hidden' name='JWT'
+            value='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1OTU3YjMyZC0yMjIxLTQ2OTktYmVkNS0yZTBlMzU0YjZiMjIiLCJpYXQiOjE3NDQ0ODg4NzQsImV4cCI6MTc0NDQ4OTQ3NCwiaXNzIjoiNWJkOWUwZTQ0NDRkY2UxNTM0MjhjOTQwIiwiT3JnVW5pdElkIjoiNWJkOWI1NWU0NDQ0NzYxYWMwYWYxYzgwIn0.Ng3yHuRpE6_PhQyezGk0MLolaT3U4E3I4lYRBYOgLsc' />
+         </form>">
+    </iframe>
+    <script>
+		
+		document.getElementById("status").innerText = 'Starting';
+        //let value = 42;
+        console.info('Hello Console');
+
+
+        window.onload = function () {
+            const el = document.getElementById('myiframe');
+            el.contentWindow.document.getElementById('collectionForm').submit()
+        }
+        window.addEventListener("message", function (event) {
+            //This is a Cardinal Commerce URL in live.
+            //if (event.origin === "https://centinelapistag.cardinalcommerce.com") {
+            if (event.origin === "https://secure-test.worldpay.com") {
+            //if (true) {
+                var data = JSON.parse(event.data);
+                console.warn('Merchant received a message:', data);
+                if (data !== undefined && data.Status) {
+                    // Extract the value of SessionId for onward processing.
+                    console.info('Success');
+					document.getElementById("status").innerText = 'Success';
+					//document.getElementById("ddcResult").innerText = "Here the message";
+					document.getElementById("ddcResult").innerText = JSON.stringify(data);
+					event.source.postMessage('this is response.',event.origin);
+                    console.info(data);
+                    
+                }
+            }
+        }, false);
+        console.info('END');
+        //console.info(data);
+		//document.getElementById("ddcResult").innerText = data.JSON;
+
+    </script>
+</body>
+
+</html>
